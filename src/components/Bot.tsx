@@ -259,7 +259,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
    * Add each chat message into localStorage
    */
   const addChatMessage = (allMessage: MessageType[]) => {
-    setLocalStorageChatflow(props.chatflowid, chatId(),  (props.chatflowConfig?.vars as any)?.customerId , { chatHistory: allMessage });
+    setLocalStorageChatflow(props.chatflowid, chatId(), (props.chatflowConfig?.vars as any)?.customerId, { chatHistory: allMessage });
   };
 
   const updateLastMessage = (text: string, messageId: string, sourceDocuments: any = null, fileAnnotations: any = null) => {
@@ -430,7 +430,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   const clearChat = () => {
     try {
-      removeLocalStorageChatHistory(props.chatflowid,(props.chatflowConfig?.vars as any)?.customerId);
+      removeLocalStorageChatHistory(props.chatflowid, (props.chatflowConfig?.vars as any)?.customerId);
       setChatId(
         (props.chatflowConfig?.vars as any)?.customerId ? `${(props.chatflowConfig?.vars as any).customerId.toString()}+${uuidv4()}` : uuidv4(),
       );
@@ -901,24 +901,26 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                         fontSize={props.fontSize}
                       />
                     )}
-                    {message.type === 'leadCaptureMessage' && leadsConfig()?.status && !getLocalStorageChatflow(props.chatflowid,(props.chatflowConfig?.vars as any)?.customerId)?.lead && (
-                      <LeadCaptureBubble
-                        message={message}
-                        chatflowid={props.chatflowid}
-                        chatId={chatId()}
-                        apiHost={props.apiHost}
-                        backgroundColor={props.botMessage?.backgroundColor}
-                        textColor={props.botMessage?.textColor}
-                        fontSize={props.fontSize}
-                        showAvatar={props.botMessage?.showAvatar}
-                        avatarSrc={props.botMessage?.avatarSrc}
-                        leadsConfig={leadsConfig()}
-                        sendButtonColor={props.textInput?.sendButtonColor}
-                        isLeadSaved={isLeadSaved()}
-                        setIsLeadSaved={setIsLeadSaved}
-                        setLeadEmail={setLeadEmail}
-                      />
-                    )}
+                    {message.type === 'leadCaptureMessage' &&
+                      leadsConfig()?.status &&
+                      !getLocalStorageChatflow(props.chatflowid, (props.chatflowConfig?.vars as any)?.customerId)?.lead && (
+                        <LeadCaptureBubble
+                          message={message}
+                          chatflowid={props.chatflowid}
+                          chatId={chatId()}
+                          apiHost={props.apiHost}
+                          backgroundColor={props.botMessage?.backgroundColor}
+                          textColor={props.botMessage?.textColor}
+                          fontSize={props.fontSize}
+                          showAvatar={props.botMessage?.showAvatar}
+                          avatarSrc={props.botMessage?.avatarSrc}
+                          leadsConfig={leadsConfig()}
+                          sendButtonColor={props.textInput?.sendButtonColor}
+                          isLeadSaved={isLeadSaved()}
+                          setIsLeadSaved={setIsLeadSaved}
+                          setLeadEmail={setLeadEmail}
+                        />
+                      )}
                     {message.type === 'userMessage' && loading() && index() === messages().length - 1 && <LoadingBubble />}
                     {message.type === 'apiMessage' && message.message === '' && loading() && index() === messages().length - 1 && <LoadingBubble />}
                     {message.sourceDocuments && message.sourceDocuments.length && (
