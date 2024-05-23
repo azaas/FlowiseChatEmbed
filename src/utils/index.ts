@@ -57,27 +57,31 @@ export const sendRequest = async <ResponseData>(
   }
 };
 
-export const setLocalStorageChatflow = (chatflowid: string, chatId: string, saveObj: Record<string, any> = {}) => {
-  const chatDetails = localStorage.getItem(`${chatflowid}_EXTERNAL`);
+export const setLocalStorageChatflow = (chatflowid: string, chatId: string, customerId: any, saveObj: Record<string, any> = {}) => {
+  const chatStorageKey = `${chatflowid}_${customerId}_EXTERNAL`;
+  const chatDetails = localStorage.getItem(chatStorageKey);
+
   const obj = { ...saveObj };
   if (chatId) obj.chatId = chatId;
 
   if (!chatDetails) {
-    localStorage.setItem(`${chatflowid}_EXTERNAL`, JSON.stringify(obj));
+    localStorage.setItem(chatStorageKey, JSON.stringify(obj));
   } else {
     try {
       const parsedChatDetails = JSON.parse(chatDetails);
-      localStorage.setItem(`${chatflowid}_EXTERNAL`, JSON.stringify({ ...parsedChatDetails, ...obj }));
+      localStorage.setItem(chatStorageKey, JSON.stringify({ ...parsedChatDetails, ...obj }));
     } catch (e) {
       const chatId = chatDetails;
       obj.chatId = chatId;
-      localStorage.setItem(`${chatflowid}_EXTERNAL`, JSON.stringify(obj));
+      localStorage.setItem(chatStorageKey, JSON.stringify(obj));
     }
   }
 };
 
-export const getLocalStorageChatflow = (chatflowid: string) => {
-  const chatDetails = localStorage.getItem(`${chatflowid}_EXTERNAL`);
+export const getLocalStorageChatflow = (chatflowid: string, customerId: string) => {
+  const chatStorageKey = `${chatflowid}_${customerId}_EXTERNAL`;
+  const chatDetails = localStorage.getItem(chatStorageKey);
+
   if (!chatDetails) return {};
   try {
     return JSON.parse(chatDetails);
@@ -86,18 +90,20 @@ export const getLocalStorageChatflow = (chatflowid: string) => {
   }
 };
 
-export const removeLocalStorageChatHistory = (chatflowid: string) => {
-  const chatDetails = localStorage.getItem(`${chatflowid}_EXTERNAL`);
+export const removeLocalStorageChatHistory = (chatflowid: string, customerId: string) => {
+  const chatStorageKey = `${chatflowid}_${customerId}_EXTERNAL`;
+  const chatDetails = localStorage.getItem(chatStorageKey);
+
   if (!chatDetails) return;
   try {
     const parsedChatDetails = JSON.parse(chatDetails);
     if (parsedChatDetails.lead) {
       // Dont remove lead when chat is cleared
       const obj = { lead: parsedChatDetails.lead };
-      localStorage.removeItem(`${chatflowid}_EXTERNAL`);
-      localStorage.setItem(`${chatflowid}_EXTERNAL`, JSON.stringify(obj));
+      localStorage.removeItem(chatStorageKey);
+      localStorage.setItem(chatStorageKey, JSON.stringify(obj));
     } else {
-      localStorage.removeItem(`${chatflowid}_EXTERNAL`);
+      localStorage.removeItem(chatStorageKey);
     }
   } catch (e) {
     return;

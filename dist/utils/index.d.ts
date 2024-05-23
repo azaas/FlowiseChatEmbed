@@ -11,7 +11,7 @@ export declare const sendRequest: <ResponseData>(params: {
     data?: ResponseData | undefined;
     error?: Error | undefined;
 }>;
-export declare const setLocalStorageChatflow: (chatflowid: string, chatId: string, saveObj?: Record<string, any>) => void;
-export declare const getLocalStorageChatflow: (chatflowid: string) => any;
-export declare const removeLocalStorageChatHistory: (chatflowid: string) => void;
+export declare const setLocalStorageChatflow: (chatflowid: string, chatId: string, customerId: any, saveObj?: Record<string, any>) => void;
+export declare const getLocalStorageChatflow: (chatflowid: string, customerId: string) => any;
+export declare const removeLocalStorageChatHistory: (chatflowid: string, customerId: string) => void;
 //# sourceMappingURL=index.d.ts.map

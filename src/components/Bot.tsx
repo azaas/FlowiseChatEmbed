@@ -259,7 +259,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
    * Add each chat message into localStorage
    */
   const addChatMessage = (allMessage: MessageType[]) => {
-    setLocalStorageChatflow(props.chatflowid, chatId(), { chatHistory: allMessage });
+    setLocalStorageChatflow(props.chatflowid, chatId(),  (props.chatflowConfig?.vars as any)?.customerId , { chatHistory: allMessage });
   };
 
   const updateLastMessage = (text: string, messageId: string, sourceDocuments: any = null, fileAnnotations: any = null) => {
@@ -430,7 +430,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   const clearChat = () => {
     try {
-      removeLocalStorageChatHistory(props.chatflowid);
+      removeLocalStorageChatHistory(props.chatflowid,(props.chatflowConfig?.vars as any)?.customerId);
       setChatId(
         (props.chatflowConfig?.vars as any)?.customerId ? `${(props.chatflowConfig?.vars as any).customerId.toString()}+${uuidv4()}` : uuidv4(),
       );
@@ -440,7 +440,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
           type: 'apiMessage',
         },
       ];
-      if (leadsConfig()?.status && !getLocalStorageChatflow(props.chatflowid)?.lead) {
+      if (leadsConfig()?.status && !getLocalStorageChatflow(props.chatflowid, (props.chatflowConfig?.vars as any)?.customerId)?.lead) {
         messages.push({ message: '', type: 'leadCaptureMessage' });
       }
       setMessages(messages);
@@ -467,7 +467,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
 
   // eslint-disable-next-line solid/reactivity
   createEffect(async () => {
-    const chatMessage = getLocalStorageChatflow(props.chatflowid);
+    const chatMessage = getLocalStorageChatflow(props.chatflowid, (props.chatflowConfig?.vars as any)?.customerId);
     if (chatMessage && Object.keys(chatMessage).length) {
       if (chatMessage.chatId) setChatId(chatMessage.chatId);
       const savedLead = chatMessage.lead;
@@ -528,7 +528,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
       }
       if (chatbotConfig.leads) {
         setLeadsConfig(chatbotConfig.leads);
-        if (chatbotConfig.leads?.status && !getLocalStorageChatflow(props.chatflowid)?.lead) {
+        if (chatbotConfig.leads?.status && !getLocalStorageChatflow(props.chatflowid, (props.chatflowConfig?.vars as any)?.customerId)?.lead) {
           setMessages((prevMessages) => [...prevMessages, { message: '', type: 'leadCaptureMessage' }]);
         }
       }
@@ -901,7 +901,7 @@ export const Bot = (botProps: BotProps & { class?: string }) => {
                         fontSize={props.fontSize}
                       />
                     )}
-                    {message.type === 'leadCaptureMessage' && leadsConfig()?.status && !getLocalStorageChatflow(props.chatflowid)?.lead && (
+                    {message.type === 'leadCaptureMessage' && leadsConfig()?.status && !getLocalStorageChatflow(props.chatflowid,(props.chatflowConfig?.vars as any)?.customerId)?.lead && (
                       <LeadCaptureBubble
                         message={message}
                         chatflowid={props.chatflowid}
